@@ -85,12 +85,36 @@ int main(int argc,char** argv)
     if (pid2==0)
       CloseAndExec(pipefd_2,pipefd_1,cmd2);
 
-  
+
 
   exit(EXIT_SUCCESS);
 }
 
+
 void CloseAndExec(int* pfd_A,int* pfd_B,char** cmd)
 {
 
+  char path[SIZE];
+  char* ptr;
+  close(pfd_B[0]);
+  close(pfd_B[1]);
+  close(pfd_A[0]);
+  close(1);
+  dup(pfd_A[1]);
+  close(pfd_A[1]);
+
+  strcpy(path,cmd[0]);
+  if((ptr=strrchr(cmd[0],'/'))!=NULL)
+  {
+    char temp[SIZE];
+    strcpy(temp,ptr+1);
+    strcpy(cmd[0],temp);
+  }
+  if(execvp(path,cmd)==-1)
+  {
+    pid_t parent=getppid();
+    perror(path);
+    kill(parent, SIGTERM);
+    exit(EXIT_FAILURE);
+  }
 }
