@@ -13,9 +13,7 @@
 
 void CloseAndExec(int *pfd_A, int *pfd_B, char **cmd);
 
-int
-main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
 	char *cmd1[SIZE];
 	char *cmd2[SIZE];
 	char **command;
@@ -70,7 +68,7 @@ main(int argc, char **argv)
 	if (pid1 == 0)
 		CloseAndExec(pipefd_1, pipefd_2, cmd1);
 	
-	pid2 = fork()
+	pid2 = fork();
 	if (pid2 < 0) {
 		perror("Fork2 error: ");
 		exit(EXIT_FAILURE);
